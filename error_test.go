@@ -10,38 +10,29 @@ import (
 )
 
 func TestWithError(t *testing.T) {
-	var tests = []struct {
-		msg    string
-		status int
-	}{
+	var tests = []Error{
 		{
-			msg:    "not found",
-			status: http.StatusNotFound,
+			Message:    "not found",
+			StatusCode: http.StatusNotFound,
 		},
 	}
 	for _, tt := range tests {
 		tt := tt
-		t.Run(tt.msg, func(t *testing.T) {
+		t.Run(tt.Message, func(t *testing.T) {
 			// Arrange.
 			w := httptest.NewRecorder()
 
-			WithError(w, tt.msg, tt.status)
+			WithError(w, tt.Message, tt.StatusCode)
 
 			// Assert.
-			expected := map[string]interface{}{
-				"message":    tt.msg,
-				"statusCode": float64(tt.status),
+			if tt.StatusCode != w.Result().StatusCode {
+				t.Errorf("expected status: %d, got %d", tt.StatusCode, w.Result().StatusCode)
 			}
-			if tt.status != w.Result().StatusCode {
-				t.Errorf("expected status: %d, got %d", tt.status, w.Result().StatusCode)
-			}
-			actual := map[string]interface{}{}
-			dec := json.NewDecoder(w.Result().Body)
-			_ = dec.Decode(&actual)
-			if diff := cmp.Diff(expected, actual); diff != "" {
+			var actual Error
+			json.NewDecoder(w.Result().Body).Decode(&actual)
+			if diff := cmp.Diff(tt, actual); diff != "" {
 				t.Error(diff)
 			}
 		})
 	}
 }
-

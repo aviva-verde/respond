@@ -5,15 +5,19 @@ import (
 	"net/http"
 )
 
+type Error struct {
+	Message    string   `json:"message"`
+	StatusCode int      `json:"statusCode"`
+	Issues     []string `json:"issues"`
+}
+
 func WithError(w http.ResponseWriter, msg string, status int, issues ...string) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(status)
-	v := map[string]any{
-		"message":    msg,
-		"statusCode": int64(status),
-	}
-	if len(issues) > 0 {
-		v["issues"] = issues
+	v := Error{
+		Message:    msg,
+		StatusCode: status,
+		Issues:     issues,
 	}
 	json.NewEncoder(w).Encode(v)
 }
