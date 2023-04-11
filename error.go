@@ -8,7 +8,7 @@ import (
 type Error struct {
 	Message    string   `json:"message"`
 	StatusCode int      `json:"statusCode"`
-	Issues     []string `json:"issues"`
+	Issues     []string `json:"issues,omitempty"`
 }
 
 func WithError(w http.ResponseWriter, msg string, status int, issues ...string) {
