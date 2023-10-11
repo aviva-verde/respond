@@ -5,10 +5,17 @@ import (
 	"net/http"
 )
 
+// Error is a standard error response.
 type Error struct {
-	Message    string   `json:"message"`
-	StatusCode int      `json:"statusCode"`
-	Issues     []string `json:"issues,omitempty"`
+	// Message is the error message.
+	// Example: "The request was invalid."
+	Message string `json:"message"`
+	// StatusCode is the HTTP status code.
+	// Example: 400
+	StatusCode int `json:"statusCode"`
+	// Issues is a list of issues with the request.
+	// Example: ["The request was invalid."]
+	Issues []string `json:"issues,omitempty"`
 }
 
 func WithError(w http.ResponseWriter, msg string, status int, issues ...string) {
