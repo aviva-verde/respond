@@ -13,7 +13,7 @@ type Error struct {
 	// StatusCode is the HTTP status code.
 	// Example: 400
 	StatusCode int `json:"statusCode"`
-	// Issues is a list of issues with the request.
+	// Issues is a list of issues with the request. This is optional.
 	// Example: ["The request was invalid."]
 	Issues []string `json:"issues,omitempty"`
 }
