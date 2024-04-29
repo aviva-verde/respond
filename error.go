@@ -8,14 +8,11 @@ import (
 // Error is a standard error response.
 type Error struct {
 	// Message is the error message.
-	// Example: "The request was invalid."
-	Message string `json:"message"`
+	Message string `json:"message",example:"The request was invalid."`
 	// StatusCode is the HTTP status code.
-	// Example: 400
-	StatusCode int `json:"statusCode"`
+	StatusCode int `json:"statusCode",example:"400"`
 	// Issues is a list of issues with the request. This is optional.
-	// Example: ["The request was invalid."]
-	Issues []string `json:"issues,omitempty"`
+	Issues []string `json:"issues,omitempty",example:"The request was invalid."`
 }
 
 func WithError(w http.ResponseWriter, msg string, status int, issues ...string) {
