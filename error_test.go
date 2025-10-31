@@ -1,12 +1,11 @@
 package respond
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
+	"github.com/aviva-verde/respond/httpassert"
 )
 
 func TestWithError(t *testing.T) {
@@ -28,11 +27,7 @@ func TestWithError(t *testing.T) {
 			if tt.StatusCode != w.Result().StatusCode {
 				t.Errorf("expected status: %d, got %d", tt.StatusCode, w.Result().StatusCode)
 			}
-			var actual Error
-			json.NewDecoder(w.Result().Body).Decode(&actual)
-			if diff := cmp.Diff(tt, actual); diff != "" {
-				t.Error(diff)
-			}
+			httpassert.JSONBodyEqual(t, tt, w.Result().Body)
 		})
 	}
 }
