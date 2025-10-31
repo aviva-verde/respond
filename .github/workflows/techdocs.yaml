@@ -15,4 +15,4 @@ jobs:
       ENTITY_NAME: respond
     permissions:
       id-token: write
-      contents: read    
+      contents: read
