@@ -1,0 +1,62 @@
+name: Publish Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      issues: read
+    name: Publish Package
+    container: ghcr.io/aviva-verde/aws-go-cdk-action:main
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com/
+          scope: '@aviva-verde'
+
+      - name: Get modules
+        env:
+          TOKEN: ${{ secrets.CI_USER_PERSONAL_ACCESS_TOKEN }}
+        run: |
+          git config --global url."https://aviva-verde-ci-user:${TOKEN}@github.com".insteadOf "https://github.com"
+          xc get
+
+      - name: Test
+        run: xc test
+
+      - name: Run Staticcheck analysis
+        run: |
+          staticcheck ./...
+
+      - name: Run Gosec Security Scanner
+        run: |
+          gosec ./...
+
+      - name: Npm Install
+        run: npm i
+            
+      - name: Build package
+        run: npm run build-package
+        
+      - name: Copy package.json
+        run: cp package.json dist/
+          
+      - name: Publish
+        run: |
+          npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
