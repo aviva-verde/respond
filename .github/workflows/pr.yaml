@@ -1,0 +1,17 @@
+name: PR Verification
+on:
+  pull_request:
+    branches:
+      - 'main'
+jobs:
+  verify:
+    name: Verify
+    uses: aviva-verde/infrastructure-cicd/.github/workflows/go-pr.yaml@main
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+    with:
+      ROLE_SUFFIX: respond
+      SKIP_CDK_SYNTH: true
+    secrets: inherit

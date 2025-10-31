@@ -1,0 +1,18 @@
+name: Publish TechDocs
+
+on:
+  push:
+    branches: [main]
+    # Only run the action when there is a change to the following paths
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+
+jobs:
+  publish-techdocs-site:
+    uses: aviva-verde/infrastructure-cicd/.github/workflows/techdocs.yaml@main
+    with:
+      ENTITY_NAME: respond
+    permissions:
+      id-token: write
+      contents: read

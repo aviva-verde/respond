@@ -1,12 +1,11 @@
 package respond
 
 import (
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
+	"github.com/aviva-verde/respond/httpassert"
 )
 
 func TestWithJSON(t *testing.T) {
@@ -40,13 +39,7 @@ func TestWithJSON(t *testing.T) {
 			if http.StatusOK != w.Result().StatusCode {
 				t.Errorf("expected status 200, got %d", w.Result().StatusCode)
 			}
-			actualBody, err := io.ReadAll(w.Result().Body)
-			if err != nil {
-				t.Fatalf("failed to read response body: %v", err)
-			}
-			if diff := cmp.Diff(tt.expectedBody, string(actualBody)); diff != "" {
-				t.Error(diff)
-			}
+			httpassert.JSONBodyEqual(t, tt.expectedBody, w.Result().Body)
 		})
 	}
 }
