@@ -18,7 +18,7 @@ func JSONBodyEqual(t *testing.T, expected interface{}, actual io.Reader) {
 		if expected == nil {
 			return
 		}
-		t.Error("expected a body but received nil")
+		t.Error("expected a response body but received nil")
 	}
 
 	bodyBytes, err := io.ReadAll(actual)
@@ -27,7 +27,8 @@ func JSONBodyEqual(t *testing.T, expected interface{}, actual io.Reader) {
 	}
 
 	if expected == nil {
-		assert.Empty(t, bodyBytes, "expected no body but one was received")
+		assert.Empty(t, bodyBytes, "expected no response body but one was received")
+		return
 	}
 
 	var expectedBody string
@@ -46,5 +47,6 @@ func JSONBodyEqual(t *testing.T, expected interface{}, actual io.Reader) {
 		t,
 		strings.TrimSpace(expectedBody),
 		strings.TrimSpace(string(bodyBytes)),
+		"expected and actual response bodies do not match",
 	)
 }
