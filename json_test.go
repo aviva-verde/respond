@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/aviva-verde/respond/httpassert"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestWithJSON(t *testing.T) {
@@ -33,12 +34,10 @@ func TestWithJSON(t *testing.T) {
 			// Arrange.
 			w := httptest.NewRecorder()
 
-			WithJSON(w, tt.item, 200)
+			WithJSON(w, tt.item, http.StatusOK)
 
 			// Assert.
-			if http.StatusOK != w.Result().StatusCode {
-				t.Errorf("expected status 200, got %d", w.Result().StatusCode)
-			}
+			assert.Equal(t, http.StatusOK, w.Result().StatusCode, "status code does not match")
 			httpassert.JSONBodyEqual(t, tt.expectedBody, w.Result().Body)
 		})
 	}

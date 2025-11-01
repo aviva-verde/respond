@@ -15,6 +15,9 @@ type Error struct {
 	Issues []string `json:"issues,omitempty" example:"The request was invalid."`
 }
 
+// WithError an error response to the response writer with given status code. This includes an error
+// message, msg, and an optional list of issues. The resulting body will be an Error struct
+// encoded as JSON.
 func WithError(w http.ResponseWriter, msg string, status int, issues ...string) {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(status)
@@ -23,5 +26,5 @@ func WithError(w http.ResponseWriter, msg string, status int, issues ...string) 
 		StatusCode: status,
 		Issues:     issues,
 	}
-	json.NewEncoder(w).Encode(v)
+	_ = json.NewEncoder(w).Encode(v)
 }

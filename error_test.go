@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/aviva-verde/respond/httpassert"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestWithError(t *testing.T) {
@@ -24,9 +25,7 @@ func TestWithError(t *testing.T) {
 			WithError(w, tt.Message, tt.StatusCode)
 
 			// Assert.
-			if tt.StatusCode != w.Result().StatusCode {
-				t.Errorf("expected status: %d, got %d", tt.StatusCode, w.Result().StatusCode)
-			}
+			assert.Equal(t, tt.StatusCode, w.Result().StatusCode, "status code does not match")
 			httpassert.JSONBodyEqual(t, tt, w.Result().Body)
 		})
 	}
