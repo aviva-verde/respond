@@ -30,3 +30,69 @@ func TestWithError(t *testing.T) {
 		})
 	}
 }
+
+func TestWithBadRequest(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	WithBadRequest(w, "Test message")
+	assert.Equal(t, http.StatusBadRequest, w.Result().StatusCode, "status code does not match")
+	httpassert.JSONBodyEqual(t, Error{
+		Message:    "Test message",
+		StatusCode: http.StatusBadRequest,
+	}, w.Result().Body)
+}
+
+func TestWithUnauthorized(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	WithUnauthorized(w, "Test message")
+	assert.Equal(t, http.StatusUnauthorized, w.Result().StatusCode, "status code does not match")
+	httpassert.JSONBodyEqual(t, Error{
+		Message:    "Test message",
+		StatusCode: http.StatusUnauthorized,
+	}, w.Result().Body)
+}
+
+func TestWithForbidden(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	WithForbidden(w, "Test message")
+	assert.Equal(t, http.StatusForbidden, w.Result().StatusCode, "status code does not match")
+	httpassert.JSONBodyEqual(t, Error{
+		Message:    "Test message",
+		StatusCode: http.StatusForbidden,
+	}, w.Result().Body)
+}
+
+func TestWithNotFond(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	WithNotFound(w, "Test message")
+	assert.Equal(t, http.StatusNotFound, w.Result().StatusCode, "status code does not match")
+	httpassert.JSONBodyEqual(t, Error{
+		Message:    "Test message",
+		StatusCode: http.StatusNotFound,
+	}, w.Result().Body)
+}
+
+func TestWithMethodNotAllowed(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	WithMethodNotAllowed(w, "Test message")
+	assert.Equal(t, http.StatusMethodNotAllowed, w.Result().StatusCode, "status code does not match")
+	httpassert.JSONBodyEqual(t, Error{
+		Message:    "Test message",
+		StatusCode: http.StatusMethodNotAllowed,
+	}, w.Result().Body)
+}
+
+func TestWithInternalServerError(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	WithInternalServerError(w, "Test message")
+	assert.Equal(t, http.StatusInternalServerError, w.Result().StatusCode, "status code does not match")
+	httpassert.JSONBodyEqual(t, Error{
+		Message:    "Test message",
+		StatusCode: http.StatusInternalServerError,
+	}, w.Result().Body)
+}
