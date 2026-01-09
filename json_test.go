@@ -42,3 +42,39 @@ func TestWithJSON(t *testing.T) {
 		})
 	}
 }
+
+func TestWithStatusOKAndJSON(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	requestBody := map[string]interface{}{
+		"key": "value",
+	}
+
+	WithStatusOKAndJSON(w, requestBody)
+	assert.Equal(t, http.StatusOK, w.Result().StatusCode, "status code does not match")
+	httpassert.JSONBodyEqual(t, requestBody, w.Result().Body)
+}
+
+func TestWithStatusCreatedAndJSON(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	requestBody := map[string]interface{}{
+		"key": "value",
+	}
+
+	WithStatusCreatedAndJSON(w, requestBody)
+	assert.Equal(t, http.StatusCreated, w.Result().StatusCode, "status code does not match")
+	httpassert.JSONBodyEqual(t, requestBody, w.Result().Body)
+}
+
+func TestWithStatusAcceptedAndJSON(t *testing.T) {
+	w := httptest.NewRecorder()
+
+	requestBody := map[string]interface{}{
+		"key": "value",
+	}
+
+	WithStatusAcceptedAndJSON(w, requestBody)
+	assert.Equal(t, http.StatusAccepted, w.Result().StatusCode, "status code does not match")
+	httpassert.JSONBodyEqual(t, requestBody, w.Result().Body)
+}
